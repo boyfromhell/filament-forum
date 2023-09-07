@@ -3,8 +3,8 @@
 namespace IchBin\FilamentForum\Filament\Resources\TagResource\Pages;
 
 use Filament\Actions\CreateAction;
-use IchBin\FilamentForum\Filament\Resources\TagResource;
 use Filament\Resources\Pages\ListRecords;
+use IchBin\FilamentForum\Filament\Resources\TagResource;
 
 class ListTags extends ListRecords
 {

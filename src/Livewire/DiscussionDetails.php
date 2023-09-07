@@ -22,12 +22,19 @@ class DiscussionDetails extends Component implements HasForms
     use InteractsWithForms;
 
     public Discussion $discussion;
+
     public int $likes = 0;
+
     public int $comments = 0;
+
     public bool $showComments = false;
-    public Comment|null $comment = null;
+
+    public ?Comment $comment = null;
+
     public bool $edit = false;
+
     public $selectedComment = null;
+
     public ?array $data = [];
 
     protected $listeners = [
@@ -35,7 +42,7 @@ class DiscussionDetails extends Component implements HasForms
         'doDeleteComment',
         'discussionEdited',
         'updateDiscussionCanceled',
-        'doDeleteDiscussion'
+        'doDeleteDiscussion',
     ];
 
     public function mount(): void
@@ -46,9 +53,10 @@ class DiscussionDetails extends Component implements HasForms
 
     public function render()
     {
-        if (!$this->discussion) {
+        if (! $this->discussion) {
             $this->skipRender();
         }
+
         return view('filament-forum::livewire.discussion-details');
     }
 
@@ -56,14 +64,14 @@ class DiscussionDetails extends Component implements HasForms
     {
         return $form
             ->schema([
-            Textarea::make('content')
-                ->label('Comment content')
-                ->required()
-                ->rows(2)
-                ->placeholder('Type your comment here...')
-                ->helperText('You can write a comment containing up to 300 characters.')
-                ->maxLength(300)
-        ])->statePath('data');
+                Textarea::make('content')
+                    ->label('Comment content')
+                    ->required()
+                    ->rows(2)
+                    ->placeholder('Type your comment here...')
+                    ->helperText('You can write a comment containing up to 300 characters.')
+                    ->maxLength(300),
+            ])->statePath('data');
     }
 
     public function addComment(): void
@@ -77,7 +85,7 @@ class DiscussionDetails extends Component implements HasForms
     {
         $this->comment = $comment;
         $this->form->fill([
-            'content' => $comment->content
+            'content' => $comment->content,
         ]);
     }
 
@@ -103,7 +111,7 @@ class DiscussionDetails extends Component implements HasForms
 
                 Action::make('cancel')
                     ->label('Cancel')
-                    ->close()
+                    ->close(),
             ])
             ->persistent()
             ->send();
@@ -126,7 +134,7 @@ class DiscussionDetails extends Component implements HasForms
         $isCreation = false;
 
         $this->comment->content = $data['content'];
-        if (!$this->comment->id) {
+        if (! $this->comment->id) {
             $this->comment->user_id = auth()->user()->id;
             $this->comment->source_id = $this->discussion->id;
             $this->comment->source_type = Discussion::class;
@@ -170,7 +178,7 @@ class DiscussionDetails extends Component implements HasForms
             $source = Like::create([
                 'user_id' => auth()->user()->id,
                 'source_id' => $this->discussion->id,
-                'source_type' => Discussion::class
+                'source_type' => Discussion::class,
             ]);
             dispatch(new DispatchNotificationsJob(auth()->user(), NotificationConstants::MY_POSTS_LIKED->value, $source));
         }
@@ -194,7 +202,7 @@ class DiscussionDetails extends Component implements HasForms
             $source = Like::create([
                 'user_id' => auth()->user()->id,
                 'source_id' => $comment,
-                'source_type' => Comment::class
+                'source_type' => Comment::class,
             ]);
             dispatch(new DispatchNotificationsJob(auth()->user(), NotificationConstants::MY_POSTS_LIKED->value, $source));
         }
@@ -206,7 +214,7 @@ class DiscussionDetails extends Component implements HasForms
 
     public function toggleComments(): void
     {
-        $this->showComments = !$this->showComments;
+        $this->showComments = ! $this->showComments;
         if ($this->showComments) {
             $this->dispatch('discussionCommentsLoaded');
         }
@@ -244,7 +252,7 @@ class DiscussionDetails extends Component implements HasForms
 
                 Action::make('cancel')
                     ->label('Cancel')
-                    ->close()
+                    ->close(),
             ])
             ->persistent()
             ->send();
@@ -265,7 +273,7 @@ class DiscussionDetails extends Component implements HasForms
     {
         $this->selectedComment = $this->discussion->comments()->where('id', $comment)->first();
         $this->dispatch('discussionCommentSelected', [
-            'id' => $comment
+            'id' => $comment,
         ]);
     }
 }

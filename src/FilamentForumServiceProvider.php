@@ -8,7 +8,9 @@ use Filament\Support\Assets\Css;
 use Filament\Support\Assets\Js;
 use Filament\Support\Facades\FilamentAsset;
 use Filament\Support\Facades\FilamentIcon;
+use IchBin\FilamentForum\Commands\FilamentForumCommand;
 use IchBin\FilamentForum\Http\Middleware\DiscussionMiddleware;
+use IchBin\FilamentForum\Testing\TestsFilamentForum;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Blade;
@@ -18,8 +20,6 @@ use Livewire\Livewire;
 use Spatie\LaravelPackageTools\Commands\InstallCommand;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use IchBin\FilamentForum\Commands\FilamentForumCommand;
-use IchBin\FilamentForum\Testing\TestsFilamentForum;
 
 class FilamentForumServiceProvider extends PackageServiceProvider
 {
@@ -77,18 +77,16 @@ class FilamentForumServiceProvider extends PackageServiceProvider
         $this->registerComponents();
         $this->registerPolicies();
 
-
-
         // Asset Registration
-//        FilamentAsset::register(
-//            $this->getAssets(),
-//            $this->getAssetPackageName()
-//        );
-//
-//        FilamentAsset::registerScriptData(
-//            $this->getScriptData(),
-//            $this->getAssetPackageName()
-//        );
+        //        FilamentAsset::register(
+        //            $this->getAssets(),
+        //            $this->getAssetPackageName()
+        //        );
+        //
+        //        FilamentAsset::registerScriptData(
+        //            $this->getScriptData(),
+        //            $this->getAssetPackageName()
+        //        );
 
         // Icon Registration
         FilamentIcon::register($this->getIcons());
@@ -187,7 +185,6 @@ class FilamentForumServiceProvider extends PackageServiceProvider
         Livewire::component('tags', \IchBin\FilamentForum\Livewire\Tags::class);
         Livewire::component('forum-notifications', \IchBin\FilamentForum\Livewire\Notifications::class);
 
-
         return $this;
     }
 
@@ -200,5 +197,4 @@ class FilamentForumServiceProvider extends PackageServiceProvider
 
         return $this;
     }
-
 }

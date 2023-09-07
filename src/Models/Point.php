@@ -15,7 +15,7 @@ class Point extends Model
     protected $table = 'forum_points';
 
     protected $fillable = [
-        'user_id', 'source_type', 'source_id', 'type', 'value'
+        'user_id', 'source_type', 'source_id', 'type', 'value',
     ];
 
     public function user(): BelongsTo

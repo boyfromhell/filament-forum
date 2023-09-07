@@ -12,17 +12,22 @@ class Replies extends Component
     use WithPagination;
 
     public Discussion $discussion;
-    public Reply|null $selectedReply = null;
+
+    public ?Reply $selectedReply = null;
+
     public $limitPerPage = 10;
+
     public $disableLoadMore = false;
+
     public $onlyBest = false;
+
     public $onlyBestEnabled = false;
 
     protected $listeners = [
         'replyAdded' => 'updateReplies',
         'replyUpdated' => 'updateReplies',
         'replyDeleted' => 'updateReplies',
-        'discussionEdited' => 'updateReplies'
+        'discussionEdited' => 'updateReplies',
     ];
 
     public function mount(): void
@@ -30,9 +35,10 @@ class Replies extends Component
         $this->onlyBestEnabled = $this->discussion->replies()->where('is_best', true)->count() > 0;
     }
 
-    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function render(): \Illuminate\Contracts\View\View | \Illuminate\Foundation\Application | \Illuminate\Contracts\View\Factory | \Illuminate\Contracts\Foundation\Application
     {
         $replies = $this->loadData();
+
         return view('filament-forum::livewire.replies', compact('replies'));
     }
 
@@ -68,6 +74,6 @@ class Replies extends Component
 
     public function toggleOnlyBest(): void
     {
-        $this->onlyBest = !$this->onlyBest;
+        $this->onlyBest = ! $this->onlyBest;
     }
 }

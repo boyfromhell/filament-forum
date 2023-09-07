@@ -17,24 +17,31 @@ class Discussions extends Component implements HasForms
     use WithPagination;
 
     public $limitPerPage = 10;
+
     public $disableLoadMore = false;
+
     public $tag;
+
     public $selectedSort;
+
     public $q;
+
     public $totalCount = 0;
+
     public ?array $data = [];
 
     public function mount(): void
     {
         $this->q = request('q');
         $this->form->fill([
-            'sort' => 'latest'
+            'sort' => 'latest',
         ]);
     }
 
-    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function render(): \Illuminate\Contracts\View\View | \Illuminate\Foundation\Application | \Illuminate\Contracts\View\Factory | \Illuminate\Contracts\Foundation\Application
     {
         $discussions = $this->loadData();
+
         return view('filament-forum::livewire.discussions', compact('discussions'));
     }
 
@@ -47,31 +54,31 @@ class Discussions extends Component implements HasForms
     {
         return $form
             ->schema([
-            Grid::make()
-                ->columns(12)
-                ->schema([
-                    Select::make('sort')
-                        ->hiddenLabel()
-                        ->selectablePlaceholder()
-                        ->options([
-                            'latest' => 'Latest',
-                            'oldest' => 'Oldest',
-                            'trending' => 'Trending',
-                            'most-liked' => 'Most liked',
-                        ])
-                        ->columnSpan([
-                            12,
-                            'lg' => 3
-                        ])
-                        ->reactive()
-                        ->afterStateUpdated(function () {
-                            $this->loadData();
-                        })
-                        ->extraAttributes([
-                            'class' => 'disabled:bg-slate-100'
-                        ])
-                ])
-        ])->statePath('data');
+                Grid::make()
+                    ->columns(12)
+                    ->schema([
+                        Select::make('sort')
+                            ->hiddenLabel()
+                            ->selectablePlaceholder()
+                            ->options([
+                                'latest' => 'Latest',
+                                'oldest' => 'Oldest',
+                                'trending' => 'Trending',
+                                'most-liked' => 'Most liked',
+                            ])
+                            ->columnSpan([
+                                12,
+                                'lg' => 3,
+                            ])
+                            ->reactive()
+                            ->afterStateUpdated(function () {
+                                $this->loadData();
+                            })
+                            ->extraAttributes([
+                                'class' => 'disabled:bg-slate-100',
+                            ]),
+                    ]),
+            ])->statePath('data');
     }
 
     public function loadData()
@@ -81,7 +88,7 @@ class Discussions extends Component implements HasForms
 
         $query = Discussion::query();
 
-        if (!auth()->user() || !auth()->user()->hasVerifiedEmail()) {
+        if (! auth()->user() || ! auth()->user()->hasVerifiedEmail()) {
             $query->where('is_public', true);
         }
 
@@ -95,31 +102,35 @@ class Discussions extends Component implements HasForms
             case 'oldest':
                 $query->orderBy('created_at', 'asc');
                 $this->selectedSort = 'Oldest discussions';
+
                 break;
             case 'trending':
                 $query->orderBy('unique_visits', 'desc')
                     ->orderBy('created_at', 'desc');
                 $this->selectedSort = 'Trending discussions';
+
                 break;
             case 'most-liked':
                 $query->withCount('likes')
                     ->orderBy('likes_count', 'desc')
                     ->orderBy('created_at', 'desc');
                 $this->selectedSort = 'Most liked discussions';
+
                 break;
             case 'latest':
             default:
                 $query->orderBy('created_at', 'desc');
                 $this->selectedSort = 'Latest discussions';
+
                 break;
         }
 
         if ($this->q) {
             $query->where(
-                fn($query) => $query
+                fn ($query) => $query
                     ->where('name', 'like', '%' . $this->q . '%')
                     ->orWhere('content', 'like', '%' . $this->q . '%')
-                    ->orWhereHas('tags', fn($query) => $query->where('name', 'like', '%' . $this->q . '%'))
+                    ->orWhereHas('tags', fn ($query) => $query->where('name', 'like', '%' . $this->q . '%'))
             );
         }
 

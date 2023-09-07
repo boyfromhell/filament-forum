@@ -12,10 +12,10 @@ class Configuration extends Model
     protected $table = 'forum_configurations';
 
     protected $fillable = [
-        'name', 'is_enabled'
+        'name', 'is_enabled',
     ];
 
     protected $casts = [
-        'is_enabled' => 'bool'
+        'is_enabled' => 'bool',
     ];
 }

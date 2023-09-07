@@ -21,9 +21,10 @@ Route::prefix('/forum')
             ->name('tag');
 
         Route::get('search', function () {
-            if (!request('q')) {
+            if (! request('q')) {
                 return redirect()->route('forum.index');
             }
+
             return view('filament-forum::forum-search');
         })
             ->name('search');

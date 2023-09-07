@@ -10,17 +10,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Notification extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'forum_notifications';
 
     protected $fillable = [
-        'name'
+        'name',
     ];
 
     public function users(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'forum_user_notifications', 'notification_id', 'user_id')->withPivot(['via_web', 'via_email']);
     }
-
 }

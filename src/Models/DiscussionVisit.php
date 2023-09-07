@@ -14,11 +14,11 @@ class DiscussionVisit extends Model
     protected $table = 'forum_discussion_visits';
 
     protected $fillable = [
-        'user_id', 'discussion_id', 'meta'
+        'user_id', 'discussion_id', 'meta',
     ];
 
     protected $casts = [
-        'meta' => 'object'
+        'meta' => 'object',
     ];
 
     public static function boot(): void

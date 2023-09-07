@@ -8,11 +8,17 @@ use Livewire\Component;
 class Header extends Component
 {
     public Discussion $discussion;
+
     public int $replies = 0;
+
     public int $comments = 0;
+
     public bool $isResolved = false;
+
     public bool $isPublic = false;
+
     public bool $isLocked = false;
+
     public bool $isSticky = false;
 
     protected $listeners = [
@@ -20,7 +26,7 @@ class Header extends Component
         'replyUpdated' => 'initData',
         'replyDeleted' => 'initData',
         'discussionEdited' => 'initData',
-        'resolvedFlagUpdated' => 'resolvedFlagUpdated'
+        'resolvedFlagUpdated' => 'resolvedFlagUpdated',
     ];
 
     public function mount(): void

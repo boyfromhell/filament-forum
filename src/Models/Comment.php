@@ -12,12 +12,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Comment extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'forum_comments';
 
     protected $fillable = [
-        'content', 'user_id', 'source_id', 'source_type'
+        'content', 'user_id', 'source_id', 'source_type',
     ];
 
     public function user(): BelongsTo

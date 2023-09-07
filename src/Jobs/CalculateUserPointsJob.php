@@ -2,9 +2,9 @@
 
 namespace IchBin\FilamentForum\Jobs;
 
+use App\Models\User;
 use IchBin\FilamentForum\Core\NotificationConstants;
 use IchBin\FilamentForum\Core\PointsConstants;
-use App\Models\User;
 use IchBin\FilamentForum\Models\Point;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -14,11 +14,17 @@ use Illuminate\Queue\SerializesModels;
 
 class CalculateUserPointsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
+
     public $source;
+
     public $type;
+
     public $notify;
 
     /**
@@ -59,17 +65,16 @@ class CalculateUserPointsJob implements ShouldQueue
                 'source_type' => get_class($this->source),
                 'source_id' => $this->source->id,
                 'type' => $this->type,
-                'value' => $points
+                'value' => $points,
             ]);
             $this->user->total_points = $this->user->total_points + $points;
             $this->user->save();
             if ($this->notify) {
                 dispatch(new DispatchNotificationsJob($this->user, NotificationConstants::POINTS_UPDATED->value, [
                     'added' => $point->value,
-                    'current' => $this->user->total_points
+                    'current' => $this->user->total_points,
                 ]));
             }
         }
     }
-
 }

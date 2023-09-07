@@ -2,7 +2,6 @@
 
 namespace IchBin\FilamentForum\Policies;
 
-
 use App\Models\User;
 use IchBin\FilamentForum\Models\Discussion;
 
@@ -29,9 +28,13 @@ class DiscussionPolicy
      */
     public function create(User $user, Discussion $discussion = null): bool
     {
-        if ($user->isAdmin()) return true;
+        if ($user->isAdmin()) {
+            return true;
+        }
 
-        if ($user->hasVerifiedEmail()) return true;
+        if ($user->hasVerifiedEmail()) {
+            return true;
+        }
 
         return false;
         //return $user->can('create_discussion');

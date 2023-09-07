@@ -10,10 +10,10 @@ class ReplyBtn extends Component
     public Discussion $discussion;
 
     protected $listeners = [
-        'discussionEdited'
+        'discussionEdited',
     ];
 
-    public function render(): \Illuminate\Contracts\View\View|\Illuminate\Foundation\Application|\Illuminate\Contracts\View\Factory|\Illuminate\Contracts\Foundation\Application
+    public function render(): \Illuminate\Contracts\View\View | \Illuminate\Foundation\Application | \Illuminate\Contracts\View\Factory | \Illuminate\Contracts\Foundation\Application
     {
         return view('filament-forum::livewire.reply-btn');
     }

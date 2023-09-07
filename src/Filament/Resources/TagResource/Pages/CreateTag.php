@@ -2,9 +2,8 @@
 
 namespace IchBin\FilamentForum\Filament\Resources\TagResource\Pages;
 
-use IchBin\filamentForum\Filament\Resources\TagResource;
-use Filament\Pages\Actions;
 use Filament\Resources\Pages\CreateRecord;
+use IchBin\filamentForum\Filament\Resources\TagResource;
 
 class CreateTag extends CreateRecord
 {

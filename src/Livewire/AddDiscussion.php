@@ -2,7 +2,6 @@
 
 namespace IchBin\FilamentForum\Livewire;
 
-use Filament\Facades\Filament;
 use Filament\Forms\Components\Grid;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
@@ -27,7 +26,8 @@ class AddDiscussion extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public Discussion|null $discussion = null;
+    public ?Discussion $discussion = null;
+
     public ?array $data = [];
 
     public function mount(): void
@@ -51,37 +51,37 @@ class AddDiscussion extends Component implements HasForms
     {
         return $form
             ->schema([
-            Toggle::make('is_public')
-                ->label('Is this discussion public?')
-                ->onIcon('fas-globe')
-                ->offColor('danger')
-                ->onColor('success')
-                ->visible(fn() => ConfigurationConstants::case('Enable public discussions')),
+                Toggle::make('is_public')
+                    ->label('Is this discussion public?')
+                    ->onIcon('fas-globe')
+                    ->offColor('danger')
+                    ->onColor('success')
+                    ->visible(fn () => ConfigurationConstants::case('Enable public discussions')),
 
-            Grid::make()
-                ->columns(5)
-                ->schema([
+                Grid::make()
+                    ->columns(5)
+                    ->schema([
 
-                    TextInput::make('name')
-                        ->label('Discussion title')
-                        ->required()
-                        ->columnSpan(3)
-                        ->maxLength(255),
+                        TextInput::make('name')
+                            ->label('Discussion title')
+                            ->required()
+                            ->columnSpan(3)
+                            ->maxLength(255),
 
-                    Select::make('tags')
-                        ->label('Tags')
-                        ->required()
-                        ->multiple()
-                        ->columnSpan(2)
-                        ->maxItems(2)
-                        ->options(Tag::query()->whereNotNull('parent_id')->pluck('name', 'id')),
+                        Select::make('tags')
+                            ->label('Tags')
+                            ->required()
+                            ->multiple()
+                            ->columnSpan(2)
+                            ->maxItems(2)
+                            ->options(Tag::query()->whereNotNull('parent_id')->pluck('name', 'id')),
 
-                ]),
+                    ]),
 
-            RichEditor::make('content')
-                ->label('Discussion content')
-                ->required(),
-        ])->statePath('data');
+                RichEditor::make('content')
+                    ->label('Discussion content')
+                    ->required(),
+            ])->statePath('data');
     }
 
     public function submit(): void
@@ -103,14 +103,14 @@ class AddDiscussion extends Component implements HasForms
                 'name' => $data['name'],
                 'user_id' => auth()->user()->id,
                 'content' => $data['content'],
-                'is_public' => $data['is_public'] ?? false
+                'is_public' => $data['is_public'] ?? false,
             ]);
             dispatch(new CalculateUserPointsJob(user: auth()->user(), source: $discussion, type: PointsConstants::START_DISCUSSION->value));
         }
         foreach ($data['tags'] as $tag) {
             DiscussionTag::create([
                 'discussion_id' => $discussion->id,
-                'tag_id' => $tag
+                'tag_id' => $tag,
             ]);
         }
         Notification::make()->success()->title(
@@ -121,7 +121,7 @@ class AddDiscussion extends Component implements HasForms
         } else {
             $this->redirect(route('forum.discussion', [
                 'discussion' => $discussion,
-                'slug' => Str::slug($discussion->name)
+                'slug' => Str::slug($discussion->name),
             ]));
         }
     }

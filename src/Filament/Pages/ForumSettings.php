@@ -9,8 +9,8 @@ use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
-use Filament\Tables\Actions\Action;
 use Filament\Pages\Page;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Filament\Tables\Columns\TextColumn;
@@ -22,8 +22,8 @@ use IchBin\FilamentForum\Models\Configuration;
 
 class ForumSettings extends Page implements HasForms, HasTable
 {
-    use InteractsWithTable;
     use InteractsWithForms;
+    use InteractsWithTable;
 
     public ?array $data = [];
 
@@ -62,7 +62,7 @@ class ForumSettings extends Page implements HasForms, HasTable
                     ->label('Configuration enabled?'),
                 TextColumn::make('updated_at')
                     ->dateTime()
-                    ->label('Last update')
+                    ->label('Last update'),
             ])
             ->filters([
                 //
@@ -81,14 +81,12 @@ class ForumSettings extends Page implements HasForms, HasTable
                         Toggle::make('is_enabled')
                             ->label('Enabled?')
                             ->required(),
-                    ])
+                    ]),
             ])
             ->actions([
-                DeleteAction::make()
+                DeleteAction::make(),
             ]);
     }
-
-
 
     public function submit()
     {

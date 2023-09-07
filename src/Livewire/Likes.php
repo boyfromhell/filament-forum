@@ -2,18 +2,19 @@
 
 namespace IchBin\FilamentForum\Livewire;
 
-use IchBin\FilamentForum\Models\Discussion;
 use IchBin\FilamentForum\Models\Comment;
+use IchBin\FilamentForum\Models\Discussion;
 use IchBin\FilamentForum\Models\Reply;
 use Livewire\Component;
 
 class Likes extends Component
 {
-    public Discussion|Reply|Comment $model;
+    public Discussion | Reply | Comment $model;
+
     public $likes;
 
     protected $listeners = [
-        'likesUpdated'
+        'likesUpdated',
     ];
 
     public function mount()

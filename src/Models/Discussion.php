@@ -13,16 +13,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Discussion extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'forum_discussions';
 
     protected $fillable = [
-        'name', 'content', 'user_id', 'is_resolved', 'is_public', 'is_locked', 'is_sticky'
+        'name', 'content', 'user_id', 'is_resolved', 'is_public', 'is_locked', 'is_sticky',
     ];
 
     protected $casts = [
-        'is_public' => 'boolean'
+        'is_public' => 'boolean',
     ];
 
     public function user(): BelongsTo

@@ -2,6 +2,13 @@
 
 namespace IchBin\FilamentForum\Livewire;
 
+use Filament\Forms\Components\Grid;
+use Filament\Forms\Components\RichEditor;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
 use Filament\Notifications\Notification;
 use IchBin\FilamentForum\Core\ConfigurationConstants;
@@ -10,14 +17,6 @@ use IchBin\FilamentForum\Core\PointsConstants;
 use IchBin\FilamentForum\Jobs\CalculateUserPointsJob;
 use IchBin\FilamentForum\Jobs\DispatchNotificationsJob;
 use IchBin\FilamentForum\Models\Discussion as DiscussionModel;
-use Filament\Facades\Filament;
-use Filament\Forms\Components\Grid;
-use Filament\Forms\Components\RichEditor;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Toggle;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use IchBin\FilamentForum\Models\DiscussionTag;
 use IchBin\FilamentForum\Models\Tag;
 use Illuminate\Support\Str;
@@ -27,7 +26,8 @@ class Discussion extends Component implements HasForms
 {
     use InteractsWithForms;
 
-    public DiscussionModel|null $discussion = null;
+    public ?DiscussionModel $discussion = null;
+
     public ?array $data = [];
 
     public function mount(): void
@@ -51,34 +51,34 @@ class Discussion extends Component implements HasForms
     {
         return $form
             ->schema([
-            Toggle::make('is_public')
-                ->label('Is this discussion public?')
-                ->visible(fn() => ConfigurationConstants::case('Enable public discussions')),
+                Toggle::make('is_public')
+                    ->label('Is this discussion public?')
+                    ->visible(fn () => ConfigurationConstants::case('Enable public discussions')),
 
-            Grid::make()
-                ->columns(5)
-                ->schema([
+                Grid::make()
+                    ->columns(5)
+                    ->schema([
 
-                    TextInput::make('name')
-                        ->label('Discussion title')
-                        ->required()
-                        ->columnSpan(3)
-                        ->maxLength(255),
+                        TextInput::make('name')
+                            ->label('Discussion title')
+                            ->required()
+                            ->columnSpan(3)
+                            ->maxLength(255),
 
-                    Select::make('tags')
-                        ->label('Tags')
-                        ->required()
-                        ->multiple()
-                        ->columnSpan(2)
-                        ->maxItems(3)
-                        ->options(Tag::query()->whereNotNull('parent_id')->pluck('name', 'id')),
+                        Select::make('tags')
+                            ->label('Tags')
+                            ->required()
+                            ->multiple()
+                            ->columnSpan(2)
+                            ->maxItems(3)
+                            ->options(Tag::query()->whereNotNull('parent_id')->pluck('name', 'id')),
 
-                ]),
+                    ]),
 
-            RichEditor::make('content')
-                ->label('Discussion content')
-                ->required(),
-        ])->statePath('data');
+                RichEditor::make('content')
+                    ->label('Discussion content')
+                    ->required(),
+            ])->statePath('data');
     }
 
     public function submit(): void
@@ -99,14 +99,14 @@ class Discussion extends Component implements HasForms
                 'name' => $data['name'],
                 'user_id' => auth()->user()->id,
                 'content' => $data['content'],
-                'is_public' => $data['is_public'] ?? false
+                'is_public' => $data['is_public'] ?? false,
             ]);
             dispatch(new CalculateUserPointsJob(user: auth()->user(), source: $discussion, type: PointsConstants::START_DISCUSSION->value));
         }
         foreach ($data['tags'] as $tag) {
             DiscussionTag::create([
                 'discussion_id' => $discussion->id,
-                'tag_id' => $tag
+                'tag_id' => $tag,
             ]);
         }
         Notification::make()->success()->title(
@@ -117,7 +117,7 @@ class Discussion extends Component implements HasForms
         } else {
             $this->redirect(route('forum.discussion', [
                 'discussion' => $discussion,
-                'slug' => Str::slug($discussion->name)
+                'slug' => Str::slug($discussion->name),
             ]));
         }
     }

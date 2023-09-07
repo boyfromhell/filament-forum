@@ -19,10 +19,15 @@ use Illuminate\Support\Str;
 
 class DispatchNotificationsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     public $user;
+
     public $notification;
+
     public $object;
 
     /**
@@ -59,6 +64,7 @@ class DispatchNotificationsJob implements ShouldQueue
                     $recipient = $this->object->user;
                     $this->sendNotification($title, $body, $recipient, $url);
                 }
+
                 break;
             case NotificationConstants::POST_IN_DISCUSSION->value:
                 // $this->object = Discussion
@@ -74,6 +80,7 @@ class DispatchNotificationsJob implements ShouldQueue
                         }
                     }
                 }
+
                 break;
             case NotificationConstants::MY_REPLY_BEST_ANSWER->value:
                 // $this->object = Reply
@@ -84,6 +91,7 @@ class DispatchNotificationsJob implements ShouldQueue
                     $recipient = $this->object->user;
                     $this->sendNotification($title, $body, $recipient, $url);
                 }
+
                 break;
             case NotificationConstants::MY_POSTS_COMMENTED->value:
                 // $this->object = Comment
@@ -100,6 +108,7 @@ class DispatchNotificationsJob implements ShouldQueue
                     $recipient = $this->object->user;
                     $this->sendNotification($title, $body, $recipient, $url);
                 }
+
                 break;
             case NotificationConstants::MY_POSTS_LIKED->value:
                 // $this->object = Like
@@ -125,6 +134,7 @@ class DispatchNotificationsJob implements ShouldQueue
                     }
                 }
                 $this->sendNotification($title, $body, $recipient, $url);
+
                 break;
             case NotificationConstants::POINTS_UPDATED->value:
                 // $this->object = array (containing 'added' and 'current')
@@ -133,6 +143,7 @@ class DispatchNotificationsJob implements ShouldQueue
                 $url = route('profile.index');
                 $recipient = $this->user;
                 $this->sendNotification($title, $body, $recipient, $url);
+
                 break;
             case NotificationConstants::DISCUSSION_LOCKED->value:
                 // $this->object = Discussion
@@ -141,6 +152,7 @@ class DispatchNotificationsJob implements ShouldQueue
                 $url = route('forum.discussion', ['discussion' => $this->object, 'slug' => Str::slug($this->object->name)]);
                 $recipient = $this->object->user;
                 $this->sendNotification($title, $body, $recipient, $url);
+
                 break;
             case NotificationConstants::DISCUSSION_UNLOCKED->value:
                 // $this->object = Discussion
@@ -149,11 +161,12 @@ class DispatchNotificationsJob implements ShouldQueue
                 $url = route('forum.discussion', ['discussion' => $this->object, 'slug' => Str::slug($this->object->name)]);
                 $recipient = $this->object->user;
                 $this->sendNotification($title, $body, $recipient, $url);
+
                 break;
         }
     }
 
-    private function sendNotification(string $title, string $body, $recipient, string|null $url)
+    private function sendNotification(string $title, string $body, $recipient, ?string $url)
     {
         if ($title && $body && $recipient) {
             // Via web
@@ -165,7 +178,7 @@ class DispatchNotificationsJob implements ShouldQueue
                             ->label('View')
                             ->icon('heroicon-s-eye')
                             ->color('secondary')
-                            ->url($url)
+                            ->url($url),
                     ];
                 }
                 Notification::make()

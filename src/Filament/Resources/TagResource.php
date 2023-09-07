@@ -2,17 +2,17 @@
 
 namespace IchBin\FilamentForum\Filament\Resources;
 
+use Filament\Forms;
 use Filament\Forms\Form;
-use Filament\Tables\Actions\Action;
 use Filament\Resources\Pages\EditRecord;
+use Filament\Resources\Resource;
+use Filament\Tables;
+use Filament\Tables\Actions\Action;
 use Filament\Tables\Table;
 use Guava\FilamentIconPicker\Forms\IconPicker;
 use Guava\FilamentIconPicker\Tables\IconColumn;
-use IchBin\FilamentForum\Models\Tag;
 use IchBin\FilamentForum\Filament\Resources\TagResource\Pages;
-use Filament\Forms;
-use Filament\Resources\Resource;
-use Filament\Tables;
+use IchBin\FilamentForum\Models\Tag;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\HtmlString;
 
@@ -43,7 +43,7 @@ class TagResource extends Resource
                     ->maxLength(255),
 
                 Forms\Components\Select::make('parent_id')
-                    ->relationship('parent','name')
+                    ->relationship('parent', 'name')
                     ->preload()
                     ->label('Parent'),
 
@@ -61,7 +61,7 @@ class TagResource extends Resource
                     //->label('Icon')
                     //->placeholder('e.g. fa-solid fa-house')
                     //->hint(fn () => new HtmlString('Please refer to <a class="text-blue-500 underline hover:cursor-pointer hover:text-blue-700" href="https://fontawesome.com/search?o=r&m=free" target="_blank">Fontawesome website</a> to choose your icon'))
-                    ->required()
+                    ->required(),
                 //->columnSpan(2)
             ]);
     }
@@ -71,7 +71,7 @@ class TagResource extends Resource
         return $table
             ->reorderable('order')
             ->reorderRecordsTriggerAction(
-                fn(Action $action, bool $isReordering) => $action
+                fn (Action $action, bool $isReordering) => $action
                     ->button()
                     ->label($isReordering ? 'Disable reordering' : 'Enable reordering'),
             )
@@ -117,6 +117,6 @@ class TagResource extends Resource
 
     public static function getEloquentQuery(): Builder
     {
-        return parent::getEloquentQuery()->orderBy('order','asc');
+        return parent::getEloquentQuery()->orderBy('order', 'asc');
     }
 }

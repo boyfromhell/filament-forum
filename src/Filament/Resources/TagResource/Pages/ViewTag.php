@@ -3,8 +3,8 @@
 namespace IchBin\FilamentForum\Filament\Resources\TagResource\Pages;
 
 use Filament\Actions\EditAction;
-use IchBin\FilamentForum\Filament\Resources\TagResource;
 use Filament\Resources\Pages\ViewRecord;
+use IchBin\FilamentForum\Filament\Resources\TagResource;
 
 class ViewTag extends ViewRecord
 {

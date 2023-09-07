@@ -18,10 +18,10 @@ class FilamentForumPlugin implements Plugin
     {
         $panel
             ->resources([
-                TagResource::class
+                TagResource::class,
             ])
             ->pages([
-                ForumSettings::class
+                ForumSettings::class,
             ]);
     }
 

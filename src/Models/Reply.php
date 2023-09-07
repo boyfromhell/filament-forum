@@ -11,12 +11,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Reply extends Model
 {
-    use HasFactory, SoftDeletes;
+    use HasFactory;
+    use SoftDeletes;
 
     protected $table = 'forum_replies';
 
     protected $fillable = [
-        'content', 'user_id', 'discussion_id', 'is_best'
+        'content', 'user_id', 'discussion_id', 'is_best',
     ];
 
     public function user(): BelongsTo

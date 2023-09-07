@@ -4,8 +4,8 @@ namespace IchBin\FilamentForum\Filament\Resources\TagResource\Pages;
 
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ViewAction;
-use IchBin\FilamentForum\Filament\Resources\TagResource;
 use Filament\Resources\Pages\EditRecord;
+use IchBin\FilamentForum\Filament\Resources\TagResource;
 
 class EditTag extends EditRecord
 {

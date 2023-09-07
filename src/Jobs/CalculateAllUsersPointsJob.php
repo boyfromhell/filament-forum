@@ -2,10 +2,10 @@
 
 namespace IchBin\FilamentForum\Jobs;
 
+use App\Models\User;
 use IchBin\FilamentForum\Core\PointsConstants;
 use IchBin\FilamentForum\Models\Comment;
 use IchBin\FilamentForum\Models\Discussion;
-use App\Models\User;
 use IchBin\FilamentForum\Models\Like;
 use IchBin\FilamentForum\Models\Reply;
 use Illuminate\Bus\Queueable;
@@ -16,7 +16,10 @@ use Illuminate\Queue\SerializesModels;
 
 class CalculateAllUsersPointsJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     /**
      * Create a new job instance.
@@ -73,7 +76,7 @@ class CalculateAllUsersPointsJob implements ShouldQueue
                 // Best replies
                 $user->replies()->where('is_best', true)
                     ->get()
-                    ->each(function (Reply $reply) use ($user) {
+                    ->each(function (Reply $reply) {
                         dispatch(new CalculateUserPointsJob($reply->user, $reply, PointsConstants::BEST_REPLY->value));
                     });
             });

@@ -52,21 +52,21 @@ trait HasForums
     public function discussionsTotalViews(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->discussions()->sum('visits')
+            get: fn () => $this->discussions()->sum('visits')
         );
     }
 
     public function discussionsTotalUniqueViews(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->discussions()->sum('unique_visits')
+            get: fn () => $this->discussions()->sum('unique_visits')
         );
     }
 
     public function lastActivity(): Attribute
     {
         return new Attribute(
-            get: fn() => $this->discussions
+            get: fn () => $this->discussions
                 ->merge($this->replies)
                 ->merge($this->comments)
                 ->merge($this->likes)
@@ -84,6 +84,7 @@ trait HasForums
         if ($isMail) {
             $query->where('via_email', true);
         }
+
         return $query->count() > 0;
     }
 }
